@@ -14,9 +14,6 @@ type Logger struct {
 
 func CreateLogger(logContext string) *Logger {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	// this creates a new Logger instance with the context of the log
-	// this will write to the standard output
-	// Filebeat will read this and send it to elasticsearch
 	logInstance := zerolog.New(os.Stdout).With().Timestamp().Str("context", logContext).Logger()
 
 	return &Logger{

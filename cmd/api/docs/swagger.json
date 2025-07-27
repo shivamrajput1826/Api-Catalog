@@ -1,0 +1,866 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "API Catalog Service",
+      "description": "API for managing events, properties, and tracking plans",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080",
+        "description": "Development server"
+      }
+    ],
+    "tags": [
+      {
+        "name": "events",
+        "description": "Operations related to events"
+      },
+      {
+        "name": "properties",
+        "description": "Operations related to properties"
+      },
+      {
+        "name": "tracking-plans",
+        "description": "Operations related to tracking plans"
+      },
+      {
+        "name": "health",
+        "description": "Health check endpoints"
+      }
+    ],
+    "paths": {
+      "/health": {
+        "get": {
+          "tags": ["health"],
+          "summary": "Health check",
+          "description": "Returns the health status of the service",
+          "responses": {
+            "200": {
+              "description": "Service is healthy",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "healthy"
+                      },
+                      "service": {
+                        "type": "string",
+                        "example": "datacatalog"
+                      },
+                      "version": {
+                        "type": "string",
+                        "example": "1.0.0"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/events": {
+        "post": {
+          "tags": ["events"],
+          "summary": "Create a new event",
+          "description": "Create a new event with name, type, and description",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEventRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Event created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "get": {
+          "tags": ["events"],
+          "summary": "Get all events",
+          "description": "Retrieve a list of all events",
+          "responses": {
+            "200": {
+              "description": "List of events",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Event"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/v1/events/{id}": {
+        "get": {
+          "tags": ["events"],
+          "summary": "Get event by ID",
+          "description": "Retrieve a single event by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Event details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "404": {
+              "description": "Event not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "put": {
+          "tags": ["events"],
+          "summary": "Update an event",
+          "description": "Update an event by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEventRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Updated event",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "404": {
+              "description": "Event not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["events"],
+          "summary": "Delete an event",
+          "description": "Delete an event by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Event deleted successfully"
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "404": {
+              "description": "Event not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/v1/properties": {
+        "post": {
+          "tags": ["properties"],
+          "summary": "Create a new property",
+          "description": "Create a new property with name, type, and description",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePropertyRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Property created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Property"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "get": {
+          "tags": ["properties"],
+          "summary": "Get all properties",
+          "description": "Retrieve a list of all properties",
+          "responses": {
+            "200": {
+              "description": "List of properties",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Property"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/v1/properties/{id}": {
+        "get": {
+          "tags": ["properties"],
+          "summary": "Get property by ID",
+          "description": "Retrieve a single property by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Property details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Property"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "404": {
+              "description": "Property not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "put": {
+          "tags": ["properties"],
+          "summary": "Update a property",
+          "description": "Update a property by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePropertyRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Updated property",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Property"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "404": {
+              "description": "Property not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["properties"],
+          "summary": "Delete a property",
+          "description": "Delete a property by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Property deleted successfully"
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "404": {
+              "description": "Property not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/v1/tracking-plans": {
+        "post": {
+          "tags": ["tracking-plans"],
+          "summary": "Create a new tracking plan",
+          "description": "Create a new tracking plan with events and properties",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTrackingPlanRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Tracking plan created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TrackingPlan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "get": {
+          "tags": ["tracking-plans"],
+          "summary": "Get all tracking plans",
+          "description": "Retrieve a list of all tracking plans",
+          "responses": {
+            "200": {
+              "description": "List of tracking plans",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/TrackingPlan"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/api/v1/tracking-plans/{id}": {
+        "get": {
+          "tags": ["tracking-plans"],
+          "summary": "Get tracking plan by ID",
+          "description": "Retrieve a single tracking plan by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tracking plan details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TrackingPlan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "404": {
+              "description": "Tracking plan not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "put": {
+          "tags": ["tracking-plans"],
+          "summary": "Update a tracking plan",
+          "description": "Update a tracking plan by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateTrackingPlanRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Updated tracking plan",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TrackingPlan"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "404": {
+              "description": "Tracking plan not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["tracking-plans"],
+          "summary": "Delete a tracking plan",
+          "description": "Delete a tracking plan by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Tracking plan deleted successfully"
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "404": {
+              "description": "Tracking plan not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Event": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "Property": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["string", "number", "boolean"]
+            },
+            "description": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "TrackingPlan": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrackingPlanEvent"
+              }
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "TrackingPlanEvent": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "trackingPlanID": {
+              "type": "integer"
+            },
+            "eventID": {
+              "type": "integer"
+            },
+            "event": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "additionalProperties": {
+              "type": "object"
+            },
+            "properties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrackingPlanEventProperty"
+              }
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "TrackingPlanEventProperty": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "trackingPlanEventID": {
+              "type": "integer"
+            },
+            "propertyID": {
+              "type": "integer"
+            },
+            "property": {
+              "$ref": "#/components/schemas/Property"
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "CreateEventRequest": {
+          "type": "object",
+          "required": ["name", "type"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "UpdateEventRequest": {
+          "type": "object",
+          "required": ["name", "type"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "CreatePropertyRequest": {
+          "type": "object",
+          "required": ["name", "type"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["string", "number", "boolean"]
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "UpdatePropertyRequest": {
+          "type": "object",
+          "required": ["name", "type"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["string", "number", "boolean"]
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "CreateTrackingPlanRequest": {
+          "type": "object",
+          "required": ["name", "events"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrackingPlanEventRequest"
+              }
+            }
+          }
+        },
+        "UpdateTrackingPlanRequest": {
+          "type": "object",
+          "required": ["name", "events"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrackingPlanEventRequest"
+              }
+            }
+          }
+        },
+        "TrackingPlanEventRequest": {
+          "type": "object",
+          "required": ["name", "properties"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "object"
+            },
+            "properties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TrackingPlanPropertyRequest"
+              }
+            }
+          }
+        },
+        "TrackingPlanPropertyRequest": {
+          "type": "object",
+          "required": ["name", "type", "required"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["string", "number", "boolean"]
+            },
+            "description": {
+              "type": "string"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
