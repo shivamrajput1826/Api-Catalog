@@ -1,10 +1,8 @@
 API_PREFIX: "/api/v1"
 PORT: 8080
-DB_HOST: "localhost"
-DB_PORT: 5432
-DB_USER: "postgres"
-DB_PASSWORD: "postgres"
-DB_NAME: "postgres"
-DB_SSL_MODE: "disable"
-DB_MAX_OPEN_CONNS: 10
-DB_MAX_IDLE_CONNS: 5
+DATABASE:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgress  # Must match POSTGRES_PASSWORD in docker-compose.yml
+  name: api-catalog

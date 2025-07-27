@@ -1,8 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/shivamrajput1826/api-catalog/config"
+	"github.com/shivamrajput1826/api-catalog/internal/db"
 	"github.com/shivamrajput1826/api-catalog/logger"
 	"github.com/shivamrajput1826/api-catalog/middleware"
 )
@@ -22,7 +25,14 @@ func main() {
 		ReadBufferSize: 1024 * 1024,
 	})
 
-	API_PREFIX := config.GetConfigValue("API_PREFIX")
+	database, err := db.ConnectDB()
+	if err != nil {
+		log.Fatal("Failed to initialize database:", err)
+	}
+	if err := db.Migrate(database); err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+	defer db.Close(database)
 
 	PORT := config.GetConfigValue("PORT")
 
